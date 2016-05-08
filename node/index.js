@@ -14,7 +14,7 @@ app.listen(3000, function() {
 
 
 function toggleGarageDoor() {
-	var garageRelay = new Gpio(17, 'out low');
+	var garageRelay = new Gpio(17, 'out');
 
 	garageRelay.writeSync(1);
 	setTimeout(function() {
