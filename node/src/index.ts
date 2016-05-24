@@ -1,5 +1,5 @@
 import express = require('express');
-import GarageToggle = require('./route/garage/toggle');
+//import GarageToggle = require('./route/garage/toggle');
 import RaspberryPiRelay = require('./gpio/RaspberryPiRelay');
 
 var app = express();
@@ -16,7 +16,8 @@ var switchLight = {
 };
 
 app.get('/v1/garage/toggle/', (request, response) => {
-	RaspberryPiRelay.executeCommand(this.outputRelay);
+	RaspberryPiRelay.executeCommand(this.openGarage);
+	RaspberryPiRelay.executeCommand(this.switchLight);
 	response.send('successfull');
 });
 //app.get('/v1/garage/light', switchLight.onRequest);
