@@ -16,8 +16,8 @@ var switchLight = {
 };
 
 app.get('/v1/garage/toggle/', (request, response) => {
-	RaspberryPiRelay.executeCommand(this.openGarage);
-	RaspberryPiRelay.executeCommand(this.switchLight);
+	RaspberryPiRelay.executeCommand(openGarage);
+	RaspberryPiRelay.executeCommand(switchLight);
 	response.send('successfull');
 });
 //app.get('/v1/garage/light', switchLight.onRequest);
