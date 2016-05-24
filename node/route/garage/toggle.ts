@@ -1,8 +1,9 @@
-module.exports = function(request, response) {
-	toggleGarageDoor();
+export = function(request, response) {
+	//toggleGarageDoor();
 	response.send('successfull');
 };
 
+/*
 function toggleGarageDoor() {
 	var Gpio = require('onoff').Gpio;
 	var garageRelay = new Gpio(17, 'out');
@@ -12,3 +13,4 @@ function toggleGarageDoor() {
 		garageRelay.writeSync(0);
 	}, 1000);
 }
+*/

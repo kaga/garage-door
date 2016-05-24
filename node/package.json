@@ -1,9 +1,12 @@
 {
-  "name": "testhttp",
+  "name": "garagepi",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install": "typings install && tsc && npm run build",
+    "start": "node build/index.js",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
