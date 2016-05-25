@@ -17,7 +17,7 @@ var switchLight = {
 }
 var garageRelay = new Gpio(switchLight.gpioOutputPin, 'out');
 var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
-	garageRelay.writeSync(state);
+	garageRelay.writeSync(state ? 1 : 0);
 });
 
 app.get('/v1/garage/toggle/', (request, response) => {
