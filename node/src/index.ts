@@ -29,18 +29,19 @@ app.get('/v1/garage/toggle/', (request, response) => {
 });
 
 app.listen(3000, function () {
-	console.log("Done");
+	log("Service Running");
 });
 
 var RSSI_THRESHOLD = -46; //~2m
 
 noble.on('discover', function (peripheral) {
+	log("discoved device: " + JSON.stringify(peripheral, null, 4));
 	if (peripheral.rssi < RSSI_THRESHOLD) {
 		// ignore
 		return;
 	}
-
-	switchLightRelay.switchOn();
+	
+	//switchLightRelay.switchOn();
 });
 
 noble.on('stateChange', function (state) {
@@ -50,3 +51,8 @@ noble.on('stateChange', function (state) {
 		noble.stopScanning();
 	}
 });
+
+function log(message: String) {
+	var timestamp = new Date();
+	console.log(timestamp + " - " + message);
+} 
