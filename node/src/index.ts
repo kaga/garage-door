@@ -7,7 +7,7 @@ var Gpio = require('onoff').Gpio;
 var noble = require('noble');
 
 var app = express();
-app.get('/v1/ping', require('./route/ping'));
+app.get('/v2/ping', require('./route/ping'));
 
 var openGarage = {
 	activateDurationInSeconds: 1,
@@ -21,7 +21,7 @@ var switchLight = {
 var garageRelay = new Gpio(switchLight.gpioOutputPin, 'out');
 garageRelay.writeSync(0);
 
-var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
+var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {	
 	log('Switch Light: ' + (state ? "On": "Off"));
 	garageRelay.writeSync(state ? 1 : 0);
 });
@@ -42,7 +42,8 @@ doorSwitch.watch((error, value) => {
 	}
 });
 
-app.get('/v1/garage/state', (request, response) => {
+app.get('/v2/garage/state', (request, response) => {
+	log(JSON.stringify(request, null, 4));
 	var doorSwitchState = doorSwitch.readSync();
 	response.send({
 		timestamp: new Date(),
@@ -50,7 +51,8 @@ app.get('/v1/garage/state', (request, response) => {
 	});
 });
 
-app.get('/v1/garage/toggle/', (request, response) => {
+app.post('/v2/garage/toggle/', (request, response) => {
+	log(JSON.stringify(request, null, 4));
 	RaspberryPiRelay.executeCommand(openGarage);
 	switchLightRelay.switchOn();
 	response.send('successfull');
