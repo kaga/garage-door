@@ -22,19 +22,25 @@ var garageRelay = new Gpio(switchLight.gpioOutputPin, 'out');
 garageRelay.writeSync(0);
 
 var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
-	console.log('Switch Light: ' + state ? "On": "Off" );
+	log('Switch Light: ' + (state ? "On": "Off"));
 	garageRelay.writeSync(state ? 1 : 0);
 });
 
 var doorSwitch = new Gpio(21, 'in', 'both');
+var previousDoorState = doorSwitch.readSync();
 
-doorSwitch.watch( _.debounce((error, value) => {
+doorSwitch.watch((error, value) => {
+	if (error) {
+		log("Error on door switch:" + error);
+		return
+	}
+
 	log("doorSwitch watch updated: " + value);
-	switchLightRelay.switchOn();
-}, 15*1000, {
-  'leading': true,
-  'trailing': false
-}));
+	if (value !== previousDoorState) {
+		previousDoorState = doorSwitch.readSync();
+		switchLightRelay.switchOn();
+	}
+});
 
 app.get('/v1/garage/state', (request, response) => {
 	var doorSwitchState = doorSwitch.readSync();
