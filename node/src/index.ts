@@ -43,7 +43,7 @@ doorSwitch.watch((error, value) => {
 });
 
 app.get('/v2/garage/state', (request, response) => {
-	log(JSON.stringify(request, null, 4));
+	log('/v2/garage/state');
 	var doorSwitchState = doorSwitch.readSync();
 	response.send({
 		timestamp: new Date(),
@@ -52,7 +52,7 @@ app.get('/v2/garage/state', (request, response) => {
 });
 
 app.post('/v2/garage/toggle/', (request, response) => {
-	log(JSON.stringify(request, null, 4));
+	log('/v2/garage/toggle/');
 	RaspberryPiRelay.executeCommand(openGarage);
 	switchLightRelay.switchOn();
 	response.send('successfull');
