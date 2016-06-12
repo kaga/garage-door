@@ -22,6 +22,21 @@ var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
 	garageRelay.writeSync(state ? 1 : 0);
 });
 
+var doorSwitch = new Gpio(21, 'in', 'both');
+
+doorSwitch.watch((error, value) => {
+	log("doorSwitch watch updated: " + value);
+	switchLightRelay.switchOn();
+});
+
+app.get('/v1/garage/state', (request, response) => {
+	var doorSwitchState = doorSwitch.readSync();
+	response.send({
+		timestamp: new Date(),
+		isOpen: (doorSwitchState == 0) ? false : true
+	});
+});
+
 app.get('/v1/garage/toggle/', (request, response) => {
 	RaspberryPiRelay.executeCommand(openGarage);
 	switchLightRelay.switchOn();
@@ -32,6 +47,7 @@ app.listen(3000, function () {
 	log("Service Running");
 });
 
+/*
 var RSSI_THRESHOLD = -46; //~2m
 
 noble.on('discover', function (peripheral) {
@@ -51,6 +67,7 @@ noble.on('stateChange', function (state) {
 		noble.stopScanning();
 	}
 });
+*/
 
 function log(message: String) {
 	var timestamp = new Date();
