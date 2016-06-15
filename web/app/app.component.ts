@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
+import { provide }    from '@angular/core';
 
+import { MockGarageService } from './garage.service.mock';
 import { GarageService } from './garage.service';
 import { Garage } from './garage';
 
@@ -12,7 +14,8 @@ import * as moment from 'moment';
   selector: 'my-app',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
-  providers: [GarageService],
+  providers: [ GarageService ],
+  //providers: [ provide(GarageService, { useClass: MockGarageService }) ], //setting up Dependency injection here?  
   directives: [
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
@@ -32,8 +35,8 @@ export class AppComponent implements OnInit {
 
   getGarageDoorState() {
     this.garageService.getGarageDoorState()
-      .subscribe(garageState => {
-        this.garage = garageState.json() 
+      .then(garageState => {
+        this.garage = garageState; 
       });
   }
 

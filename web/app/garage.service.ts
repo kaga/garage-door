@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable }     from 'rxjs/Observable';
+import 'rxjs/add/operator/toPromise';
 
 import { Garage } from './garage';
 
@@ -13,15 +13,9 @@ export class GarageService {
 
     }
 
-    getGarageDoorState() {
-        return this.http.get(this.garageDoorStateUrl)
-
-                //.map(this.extractData);
-            
-        /*return Promise.resolve({
-            isOpen: false,
-            lastUpdated: new Date()
-        });*/
+    getGarageDoorState(): Promise<Garage> {
+        return this.http.get(this.garageDoorStateUrl).toPromise()
+            .then(this.extractData);
     }
 
     private extractData(res: Response) {
