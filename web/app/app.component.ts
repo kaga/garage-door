@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { GarageService } from './garage.service';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
+
+import { GarageService } from './garage.service';
+import { Garage } from './garage';
+
 import * as moment from 'moment';
 
 @Component({
@@ -29,7 +32,9 @@ export class AppComponent implements OnInit {
 
   getGarageDoorState() {
     this.garageService.getGarageDoorState()
-      .then(garageState => this.garage = garageState);
+      .subscribe(garageState => {
+        this.garage = garageState.json() 
+      });
   }
 
   getGarageStateLabel() {
@@ -37,12 +42,6 @@ export class AppComponent implements OnInit {
   }
 
   getHumanizeLastUpdated() {
-    return moment(this.garage.lastUpdated).from(moment())
+    return moment(this.garage.timestamp).from(moment())
   }
 }
-
-export class Garage {
-  lastUpdated: Date;
-  isOpen: boolean;
-}
-

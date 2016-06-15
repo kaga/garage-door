@@ -1,16 +1,21 @@
-.widgets {
+.status {
+    color: lightslategrey;
+    padding: 5pt 0;
 }
 
-.widgets .status {
-color: green;
-padding: 5pt 0;
+.warn .status  {
+    color: darkorange;
 }
 
-.widgets .icon {
-color: orange
+.icon {
+    color: lightslategrey;
 }
 
-.widgets .badge {        
+.warn .icon  {
+    color: orange;
+}
+
+.badge {        
     margin: 10pt;
     display: inline-block;           
 }
