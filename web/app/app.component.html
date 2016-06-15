@@ -1,0 +1,11 @@
+<md-toolbar color="primary">
+    Accessory
+</md-toolbar>
+<md-card *ngIf="garage" class="widgets">
+    <i class="fa fa-car fa-3x badge icon" aria-hidden="true"></i>
+    <div class="badge">
+        <div class=".md-body-2">Garage</div>
+        <div class=".md-body-1 status">{{getGarageStateLabel()}}</div>
+    </div>
+    <p class=".md-caption"><label>last updated </label>{{getHumanizeLastUpdated()}}</p>
+</md-card>

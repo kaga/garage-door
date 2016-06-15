@@ -1,0 +1,16 @@
+.widgets {
+}
+
+.widgets .status {
+color: green;
+padding: 5pt 0;
+}
+
+.widgets .icon {
+color: orange
+}
+
+.widgets .badge {        
+    margin: 10pt;
+    display: inline-block;           
+}
