@@ -5,7 +5,8 @@
   "angular-cli": {},
   "scripts": {
     "start": "ng serve",
-    "postinstall": "typings install",
+    "start.production": "ng build --prod && ng serve --prod --port 8080",
+    "postinstall": "typings install",    
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
