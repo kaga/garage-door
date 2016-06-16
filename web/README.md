@@ -1,6 +1,8 @@
-# Garageweb
+# Garage Web
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.6.
+![HTML5 Screenshot](../images/garageweb.png)
+
+This project shows garage state in a Angular 2 HTML5 app. It was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.6.
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
