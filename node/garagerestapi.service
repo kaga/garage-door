@@ -1,0 +1,14 @@
+[Service]
+WorkingDirectory=/home/pi/Documents/garage-door/node
+ExecStart=/usr/bin/npm start
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=GarageRest
+User=pi
+Group=pi
+Envirnment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+
