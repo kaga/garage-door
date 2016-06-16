@@ -1,0 +1,14 @@
+[Service]
+WorkingDirectory=/home/pi/Documents/garage-door/web
+ExecStart=/usr/bin/npm run start.production
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=garageweb
+User=pi
+Group=pi
+Envirnment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+

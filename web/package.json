@@ -5,7 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "start": "ng serve",
-    "start.production": "ng build --prod && ng serve --prod --port 8080",
+    "start.production": "ng serve --prod --port 8080",
     "postinstall": "typings install",    
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
