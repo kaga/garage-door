@@ -11,7 +11,7 @@ import { Garage } from './garage';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'my-app',
+  selector: 'app-root',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
   providers: [ GarageService ],
