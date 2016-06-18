@@ -5,15 +5,19 @@ import IRelay = require('./gpio/IRelay');
 import RaspberryPiRelay = require('./gpio/RaspberryPiRelay');
 var Gpio = require('onoff').Gpio;
 var noble = require('noble');
+var sendevent = require('sendevent');
 
 var app = express();
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();	
+	next();
 });
 
 app.get('/v2/ping', require('./route/ping'));
+
+var garageEvents = sendevent('/events/garage');
+app.use(garageEvents);
 
 var openGarage = {
 	activateDurationInSeconds: 1,
@@ -27,8 +31,8 @@ var switchLight = {
 var garageRelay = new Gpio(switchLight.gpioOutputPin, 'out');
 garageRelay.writeSync(0);
 
-var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {	
-	log('Switch Light: ' + (state ? "On": "Off"));
+var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
+	log('Switch Light: ' + (state ? "On" : "Off"));
 	garageRelay.writeSync(state ? 1 : 0);
 });
 
@@ -45,6 +49,7 @@ doorSwitch.watch((error, value) => {
 	if (value !== previousDoorState) {
 		previousDoorState = doorSwitch.readSync();
 		switchLightRelay.switchOn();
+		fireGarageEvents();
 	}
 });
 
@@ -60,23 +65,17 @@ app.post('/v2/garage/toggle/', (request, response) => {
 	response.send('successfull');
 });
 
-app.get('/events/garage', function (req, res) {
-  res.writeHead(200, {
-    'Connection': 'keep-alive',
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache'
-  });
-
-  setInterval(function () {
-    var data = getGarageJson();
-    log('writing /events/garage' + data);
-    res.write('data: ' + JSON.stringify(data) + '\n\n');
-  }, 5000);
-});
+setInterval(fireGarageEvents, 5000);
 
 app.listen(3000, function () {
 	log("Service Running");
 });
+
+function fireGarageEvents() {
+	var data = getGarageJson();
+	log('writing /events/garage' + data);
+    garageEvents.broadcast(data);
+}
 
 function getGarageJson() {
 	var doorSwitchState = doorSwitch.readSync();
