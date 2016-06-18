@@ -50,11 +50,7 @@ doorSwitch.watch((error, value) => {
 
 app.get('/v2/garage/state', (request, response) => {
 	log('/v2/garage/state');
-	var doorSwitchState = doorSwitch.readSync();
-	response.send({
-		timestamp: new Date(),
-		isOpen: (doorSwitchState == 0) ? false : true
-	});
+	response.send(getGarageJson());
 });
 
 app.post('/v2/garage/toggle/', (request, response) => {
@@ -64,9 +60,31 @@ app.post('/v2/garage/toggle/', (request, response) => {
 	response.send('successfull');
 });
 
+app.get('/events/garage', function (req, res) {
+  res.writeHead(200, {
+    'Connection': 'keep-alive',
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache'
+  });
+
+  setInterval(function () {
+    var data = getGarageJson();
+    log('writing /events/garage' + data);
+    res.write('data: ' + JSON.stringify(data) + '\n\n');
+  }, 5000);
+});
+
 app.listen(3000, function () {
 	log("Service Running");
 });
+
+function getGarageJson() {
+	var doorSwitchState = doorSwitch.readSync();
+	return {
+		timestamp: new Date(),
+		isOpen: (doorSwitchState == 0) ? false : true
+	};
+}
 
 /*
 var RSSI_THRESHOLD = -46; //~2m

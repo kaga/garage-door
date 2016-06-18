@@ -1,13 +1,16 @@
 <md-toolbar color="primary">
     Accessory
 </md-toolbar>
-<md-card *ngIf="garage">
-    <div [class.warn]="garage.isOpen === true"> 
-         <i class="fa fa-car fa-3x badge icon" aria-hidden="true"></i>
-        <div class="badge">
-            <div class=".md-body-2">Garage</div>
-            <div class=".md-body-1 status">{{getGarageStateLabel()}}</div>
+
+<div *ngIf="garage">
+    <md-card (click)="onSelect()">
+        <div [class.warn]="garage.isOpen === true">
+            <i class="fa fa-car fa-3x badge icon" aria-hidden="true"></i>
+            <div class="badge">
+                <div class=".md-body-2">Garage</div>
+                <div class=".md-body-1 status">{{getGarageStateLabel()}}</div>
+            </div>
         </div>
-    </div>    
-   
-</md-card>
+    </md-card>
+    <div class=".md-body-2">{{getHumanizeLastUpdated()}}</div>
+</div>

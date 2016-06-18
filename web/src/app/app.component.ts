@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
@@ -14,7 +14,7 @@ import * as moment from 'moment';
   selector: 'app-root',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
-  providers: [ GarageService ],
+  providers: [GarageService],
   //providers: [ provide(GarageService, { useClass: MockGarageService }) ], //setting up Dependency injection here?  
   directives: [
     MD_CARD_DIRECTIVES,
@@ -25,18 +25,25 @@ import * as moment from 'moment';
 
 export class AppComponent implements OnInit {
   garage: Garage;
+  zone: NgZone;
 
   ngOnInit() {
     this.getGarageDoorState();
+    this.garageService.setupGarageStateEventSource((garage) => {
+      this.zone.run(() => {
+        this.garage = garage;
+      });
+    });
   }
 
   constructor(private garageService: GarageService) {
+    this.zone = new NgZone({ enableLongStackTrace: false });
   }
 
   getGarageDoorState() {
     this.garageService.getGarageDoorState()
       .then(garageState => {
-        this.garage = garageState; 
+        this.garage = garageState;
       });
   }
 
@@ -45,6 +52,11 @@ export class AppComponent implements OnInit {
   }
 
   getHumanizeLastUpdated() {
-    return moment(this.garage.timestamp).from(moment())
+    return moment(this.garage.timestamp).format('ll LTS'); //.from(moment())
   }
+
+  onSelect() {
+    console.log("Yo");
+  }
+
 }
