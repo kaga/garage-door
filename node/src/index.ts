@@ -65,6 +65,12 @@ app.post('/v2/garage/toggle/', (request, response) => {
 	response.send('successfull');
 });
 
+app.post('/v2/light/toogle', (request, response) => {
+	log('/v2/light/toogle');
+	switchLightRelay.switchOn();
+	response.send('successfull');
+})
+
 setInterval(fireGarageEvents, 5000);
 
 app.listen(3000, function () {
@@ -79,9 +85,11 @@ function fireGarageEvents() {
 
 function getGarageJson() {
 	var doorSwitchState = doorSwitch.readSync();
+	var garageLightSwitchState = garageRelay.readSync();
 	return {
 		timestamp: new Date(),
-		isOpen: (doorSwitchState == 0) ? false : true
+		isOpen: (doorSwitchState == 0) ? false : true,
+		isGarageLightSwitchOn: (garageLightSwitchState == 0) ? false : true
 	};
 }
 
