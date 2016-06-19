@@ -14,8 +14,8 @@ I want to try new languages and framework as much as possible, which might not b
 1. **[Done]I want to automatically turn on/off the garage light when the garage door is open/close, so that I don't have to walk to the car in the dark.**
 1. I want to monitor my garage door state on the phone, so that I don't have to perform a visual check.
 	- [Done]A web page that shows the garage state
-	- Update the web page when the garage state changes
-	- Open/Close the garage door via the web page
+	- [Done]Update the web page when the garage state changes
+	- [Done]Open/Close the garage door via the web page
 1. I want to open the garage door automatically when I drive home, so that I don't have to stop and find my remote.
 
 ##Dev Note

@@ -6,7 +6,7 @@ import { provide }    from '@angular/core';
 
 import { MockGarageService } from './garage.service.mock';
 import { GarageService } from './garage.service';
-import { Garage } from './garage';
+import { Garage, Widget } from './garage';
 
 import * as moment from 'moment';
 
@@ -15,7 +15,7 @@ import * as moment from 'moment';
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
   providers: [GarageService],
-  //providers: [ provide(GarageService, { useClass: MockGarageService }) ], //setting up Dependency injection here?  
+  //providers: [provide(GarageService, { useClass: MockGarageService })], //setting up Dependency injection here?  
   directives: [
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
@@ -24,14 +24,16 @@ import * as moment from 'moment';
 })
 
 export class AppComponent implements OnInit {
-  garage: Garage;
+  widgets: [Widget];
+  timestamp: String;
   zone: NgZone;
 
   ngOnInit() {
     this.getGarageDoorState();
     this.garageService.setupGarageStateEventSource((garage) => {
       this.zone.run(() => {
-        this.garage = garage;
+        this.widgets = this.mapGarageToWidgets(garage);
+        this.timestamp = garage.timestamp;
       });
     });
   }
@@ -42,21 +44,45 @@ export class AppComponent implements OnInit {
 
   getGarageDoorState() {
     this.garageService.getGarageDoorState()
-      .then(garageState => {
-        this.garage = garageState;
+      .then(garage => {
+        this.widgets = this.mapGarageToWidgets(garage);
       });
   }
 
-  getGarageStateLabel() {
-    return (this.garage.isOpen === true) ? "Open" : "Closed"
+  mapGarageToWidgets(garage: Garage): [Widget] {
+    return [
+      {
+        name: 'garage',
+        state: garage.isOpen,
+        warnUserState: true,
+        fontAwesomeIcon: 'fa-car',
+        stateLabel: (garage.isOpen === true) ? "Open" : "Closed",
+        nameLabel: 'Door'
+      }, {
+        name: 'light',
+        state: garage.isGarageLightSwitchOn,
+        warnUserState: true,
+        fontAwesomeIcon: 'fa-lightbulb-o',
+        stateLabel: (garage.isGarageLightSwitchOn === true) ? "On" : "Off",
+        nameLabel: 'Light'
+      }
+    ]
+  }
+
+  setCardIconClass(widget: Widget) {
+    var classes = {};
+    classes[widget.fontAwesomeIcon] = true;
+    return classes;
   }
 
   getHumanizeLastUpdated() {
-    return moment(this.garage.timestamp).format('ll LTS'); //.from(moment())
+    if (this.timestamp) {
+      return moment(this.timestamp).format('ll LTS'); //.from(moment())
+    }
+    return "";
   }
 
-  onSelect() {
-    console.log("Yo");
+  onSelect(widget: Widget) {
+    this.garageService.toggleWidget(widget);
   }
-
 }

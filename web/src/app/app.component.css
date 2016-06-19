@@ -1,3 +1,8 @@
+.widgets {
+    list-style-type: none;
+    padding: 0;
+}
+
 .status {
     color: lightslategrey;
     padding: 5pt 0;
@@ -9,13 +14,22 @@
 
 .icon {
     color: lightslategrey;
+    text-align: center;
 }
 
 .warn .icon  {
     color: orange;
 }
 
-.badge {        
+.inline {
     margin: 10pt;
-    display: inline-block;           
+    display: inline-block;   
+}
+
+.badge {             
+    width: 60px;       
+}
+
+li {
+    padding: 10px;
 }

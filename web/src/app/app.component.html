@@ -1,16 +1,18 @@
 <md-toolbar color="primary">
     Accessory
 </md-toolbar>
-
-<div *ngIf="garage">
-    <md-card (click)="onSelect()">
-        <div [class.warn]="garage.isOpen === true">
-            <i class="fa fa-car fa-3x badge icon" aria-hidden="true"></i>
-            <div class="badge">
-                <div class=".md-body-2">Garage</div>
-                <div class=".md-body-1 status">{{getGarageStateLabel()}}</div>
+<ul class="widgets">
+    <li *ngFor="let widget of widgets">
+        <md-card (click)="onSelect(widget)">
+            <div [class.warn]="widget.state === widget.warnUserState">
+                <i class="inline fa fa-3x badge icon" [ngClass]="setCardIconClass(widget)" aria-hidden="true"></i>
+                <div class="inline">
+                    <div class=".md-body-2">{{widget.nameLabel}}</div>
+                    <div class=".md-body-1 status">{{widget.stateLabel}}</div>
+                </div>
             </div>
-        </div>
-    </md-card>
-    <div class=".md-body-2">{{getHumanizeLastUpdated()}}</div>
-</div>
+        </md-card>
+    </li>
+</ul>
+
+<div class=".md-body-2">{{getHumanizeLastUpdated()}}</div>
