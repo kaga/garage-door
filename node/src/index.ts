@@ -65,7 +65,7 @@ app.post('/v2/garage/toggle/', (request, response) => {
 	response.send('successfull');
 });
 
-app.post('/v2/light/toogle', (request, response) => {
+app.post('/v2/light/toggle', (request, response) => {
 	log('/v2/light/toogle');
 	switchLightRelay.switchOn();
 	response.send('successfull');
