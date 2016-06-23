@@ -1,10 +1,14 @@
 import when = require('when');
 
 export interface GarageState {
-    timestamp: Date;
-	isDoorOpen: boolean;
-    isLightSwitchOn: boolean;
+    timestamp: Date;	
+    isOpen: boolean;
+    isGarageLightSwitchOn: boolean;
     automaticallyTimeSwitchOff?: Date;
+
+    //Old formate
+    isDoorOpen: boolean;
+    isLightSwitchOn: boolean;
 }
 
 export interface GpioController {
@@ -125,10 +129,14 @@ export class GarageController {
     }
 
     getGarageState(): GarageState {
+        var doorOpen = this.doorController.isOpen();
+        var isLightSwitchOn = this.lightController.isSwitchOn() 
         return {
             timestamp: new Date(),
-		    isDoorOpen: this.doorController.isOpen(),
-		    isLightSwitchOn: this.lightController.isSwitchOn()            
+		    isDoorOpen: doorOpen,
+		    isLightSwitchOn: isLightSwitchOn,
+            isOpen: doorOpen,
+            isGarageLightSwitchOn: isLightSwitchOn
         }
     }
 

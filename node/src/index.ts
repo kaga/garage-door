@@ -55,7 +55,7 @@ app.listen(3000, function () {
 
 function fireGarageEvents() {
 	var data = garageController.getGarageState();
-	log('writing /events/garage' + data);
+	log('writing /events/garage' + JSON.stringify(data));
     garageEvents.broadcast(data);
 }
 
