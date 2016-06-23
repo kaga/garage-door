@@ -1,7 +1,8 @@
 {
   "name": "garagepi",
   "dependencies": {
-    "lodash": "registry:npm/lodash#4.0.0+20160416211519"
+    "lodash": "registry:npm/lodash#4.0.0+20160416211519",
+    "when": "registry:npm/when#2.4.0+20160604153244"
   },
   "globalDependencies": {
     "chai": "registry:dt/chai#3.4.0+20160317120654",
