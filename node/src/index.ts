@@ -1,10 +1,10 @@
 import express = require('express');
 import _ = require('lodash');
 
-import IRelay = require('./gpio/IRelay');
-import RaspberryPiRelay = require('./gpio/RaspberryPiRelay');
-var Gpio = require('onoff').Gpio;
-var noble = require('noble');
+import { OutputGpioController, DoorController } from './gpio/RaspberryPiRelay';
+import { GarageController } from './gpio/garageController';
+import { log } from './gpio/log';
+
 var sendevent = require('sendevent');
 
 var app = express();
@@ -19,55 +19,31 @@ app.get('/v2/ping', require('./route/ping'));
 var garageEvents = sendevent('/events/garage');
 app.use(garageEvents);
 
-var openGarage = {
-	activateDurationInSeconds: 1,
-	gpioOutputPin: 25
-};
-
-var switchLight = {
-	activateDurationInSeconds: 60,
-	gpioOutputPin: 17
-}
-var garageRelay = new Gpio(switchLight.gpioOutputPin, 'out');
-garageRelay.writeSync(0);
-
-var switchLightRelay = new IRelay.DebounceRelay(switchLight, (state) => {
-	log('Switch Light: ' + (state ? "On" : "Off"));
-	garageRelay.writeSync(state ? 1 : 0);
-});
-
-var doorSwitch = new Gpio(21, 'in', 'both');
-var previousDoorState = doorSwitch.readSync();
-
-doorSwitch.watch((error, value) => {
-	if (error) {
-		log("Error on door switch:" + error);
-		return
-	}
-
-	log("doorSwitch watch updated: " + value);
-	if (value !== previousDoorState) {
-		previousDoorState = doorSwitch.readSync();
-		switchLightRelay.switchOn();
-		fireGarageEvents();
-	}
+var doorController = new DoorController();
+var lightController = new OutputGpioController(17);
+var garageController = new GarageController(doorController, lightController, (state) => {
+	log("doorSwitch watch updated: " + state);
+	fireGarageEvents();
 });
 
 app.get('/v2/garage/state', (request, response) => {
 	log('/v2/garage/state');
-	response.send(getGarageJson());
+	response.send(garageController.getGarageState());
 });
 
 app.post('/v2/garage/toggle/', (request, response) => {
 	log('/v2/garage/toggle/');
-	RaspberryPiRelay.executeCommand(openGarage);
-	switchLightRelay.switchOn();
+	if (garageController.getGarageState().isDoorOpen) {
+		garageController.closeGarageDoor();
+	} else {
+		garageController.openGarageDoor();
+	}
 	response.send('successfull');
 });
 
 app.post('/v2/light/toggle', (request, response) => {
 	log('/v2/light/toogle');
-	switchLightRelay.switchOn();
+	garageController.switchOnLightsForDuration(1);
 	response.send('successfull');
 })
 
@@ -78,19 +54,9 @@ app.listen(3000, function () {
 });
 
 function fireGarageEvents() {
-	var data = getGarageJson();
+	var data = garageController.getGarageState();
 	log('writing /events/garage' + data);
     garageEvents.broadcast(data);
-}
-
-function getGarageJson() {
-	var doorSwitchState = doorSwitch.readSync();
-	var garageLightSwitchState = garageRelay.readSync();
-	return {
-		timestamp: new Date(),
-		isOpen: (doorSwitchState == 0) ? false : true,
-		isGarageLightSwitchOn: (garageLightSwitchState == 0) ? false : true
-	};
 }
 
 /*
@@ -114,8 +80,3 @@ noble.on('stateChange', function (state) {
 	}
 });
 */
-
-function log(message: String) {
-	var timestamp = new Date();
-	console.log(timestamp + " - " + message);
-} 
