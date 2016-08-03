@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kaga/garage-door.svg?branch=master)](https://travis-ci.org/kaga/garage-door)
+
 ![Hardware Screenshot](./images/hardware.JPG)
 
 This is my home project that trys to control my garage. I have a raspberry pi 3 that equiped with 2 relays. One of which triggers the door and the other one switch on/off a light blub. I also have a reed switch connected to the pi for detecting the door state. 

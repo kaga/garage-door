@@ -11,7 +11,7 @@ install:
   - npm install -g codecov
 script:
   - cd node 
-  - npm install
+  - npm install --ignore-scripts
   - npm run postinstall
   - npm test
 after_success:
