@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "install": "typings install && tsc",
+    "postinstall": "typings install && tsc",
     "start": "node build/index.js",
     "test": "tsc && mocha build/**/*.unit.js"
   },
