@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "4.2.3"
+sudo: false
+notifications:
+  email:
+    on_success: never
+install:
+  - npm install -g typings
+  - npm install -g typescript
+  - npm install -g codecov
+script:
+  - cd node 
+  - npm install
+  - npm run postinstall
+  - npm test
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
