@@ -3,16 +3,17 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Garage, Widget } from './garage';
+import { environment } from './environment';
 
 @Injectable()
 export class GarageService {
 
     private garageStateEventSource;
-    private baseUrl = "http://raspberrypi.local:3000/v2/";
+    private baseUrl = "/v2/";
     private garageDoorStateUrl = "garage/state";
 
     constructor(private http: Http) {
-        this.garageStateEventSource = new EventSource('http://raspberrypi.local:3000/events/garage');
+        this.garageStateEventSource = new EventSource('/events/garage');
     }
 
     setupGarageStateEventSource(onGarageStateUpdated: (garage: Garage) => void) {
@@ -23,7 +24,7 @@ export class GarageService {
     }
 
     getGarageDoorState(): Promise<Garage> {
-        return this.http.get(this.baseUrl + this.garageDoorStateUrl).toPromise()
+        return this.http.get(this.getHost() + this.baseUrl + this.garageDoorStateUrl).toPromise()
             .then(this.extractData);
     }
 
@@ -37,6 +38,11 @@ export class GarageService {
                 console.error(error);
             })
     } 
+
+    private getHost(): string {
+        let host = environment.apiHost;
+        return host;
+    }
 
     private extractData(res: Response): Garage {
         let body = res.json();

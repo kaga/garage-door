@@ -5,8 +5,12 @@
   "main": "src/index.js",
   "scripts": {
     "postinstall": "typings install && tsc",
-    "start": "node build/index.js",
-    "test": "tsc && mocha build/**/*.unit.js"
+    "start": "node build/index.js",    
+    "test": "tsc && mocha build/**/*.unit.js",
+    "build": "tsc",
+    "build-production": "npm run clean && tsc && npm run copy-html-app",
+    "clean": "rm -rf build/",
+    "copy-html-app": "./build-production.sh && cp -R ../web/dist/ ./build/html-app/"
   },
   "author": "",
   "license": "ISC",

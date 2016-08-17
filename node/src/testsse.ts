@@ -28,7 +28,7 @@ setInterval(function () {
     events.broadcast(testdata);
 }, 5000);
 
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/html-app'));
 
 var port = 8080;
 app.listen(port, function () {

@@ -29,7 +29,11 @@ const materialPkgs: string[] = [
 ];
 
 materialPkgs.forEach((pkg) => {
-  packages[`@angular2-material/${pkg}`] = { main: `${pkg}.js` };
+  packages[`@angular2-material/${pkg}`] = {
+    format: 'cjs',
+    defaultExtension: 'js', 
+    main: `${pkg}.js` 
+  };
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

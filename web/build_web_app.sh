@@ -1,5 +1,4 @@
 #!/bin/bash
 
-npm run clean
 npm install
-npm run build-production
+npm run build-production-workaround-rc5-bug
