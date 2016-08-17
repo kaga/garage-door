@@ -7,7 +7,8 @@ StandardError=syslog
 SyslogIdentifier=GarageRest
 User=pi
 Group=pi
-Envirnment=NODE_ENV=production
+Environment='NODE_ENV=production'
+Environment='PORT=8080'
 
 [Install]
 WantedBy=multi-user.target
