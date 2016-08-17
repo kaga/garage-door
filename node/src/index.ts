@@ -47,9 +47,11 @@ app.post('/v2/light/toggle', (request, response) => {
 	response.send('successfull');
 })
 
+app.use(express.static(__dirname + '/html-app'));
+
 setInterval(fireGarageEvents, 5000);
 
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
 	log("Service Running");
 });
 
