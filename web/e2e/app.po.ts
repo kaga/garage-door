@@ -1,4 +1,4 @@
-export class GaragewebPage {
+export class WebPage {
   navigateTo() {
     return browser.get('/');
   }

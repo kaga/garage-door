@@ -1,10 +1,10 @@
-import { GaragewebPage } from './app.po';
+import { WebPage } from './app.po';
 
-describe('garageweb App', function() {
-  let page: GaragewebPage;
+describe('web App', function() {
+  let page: WebPage;
 
   beforeEach(() => {
-    page = new GaragewebPage();
+    page = new WebPage();
   });
 
   it('should display message saying app works', () => {

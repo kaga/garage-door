@@ -1,3 +1,5 @@
+"use strict";
+
 // SystemJS configuration file, see links for more information
 // https://github.com/systemjs/systemjs
 // https://github.com/systemjs/systemjs/blob/master/docs/config-api.md
@@ -8,45 +10,27 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
-  'moment': 'vendor/moment/moment.js'
+  'when': 'vendor/when/dist/browser/when.min.js',
+  'moment': 'vendor/moment/min/moment.min.js'
 };
 
 /** User packages configuration. */
 const packages: any = {
-  'moment':{
-    format: 'cjs'
-  },
-  '@angular2-material/core': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'core.js'
-  },
-  '@angular2-material/card': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'card.js'
-  },
-  '@angular2-material/button': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'button.js'
-  },
-  '@angular2-material/list': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'list.js'
-  },
-  '@angular2-material/icon': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'icon.js'
-  },
-  '@angular2-material/toolbar': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'toolbar.js'
-  }
 };
+
+// put the names of any of your Material components here
+const materialPkgs: string[] = [
+  'core',  
+  'card',
+  'button',
+  'list',
+  'icon',
+  'toolbar'
+];
+
+materialPkgs.forEach((pkg) => {
+  packages[`@angular2-material/${pkg}`] = { main: `${pkg}.js` };
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************
@@ -57,6 +41,7 @@ const barrels: string[] = [
   '@angular/core',
   '@angular/common',
   '@angular/compiler',
+  '@angular/forms',
   '@angular/http',
   '@angular/router',
   '@angular/platform-browser',

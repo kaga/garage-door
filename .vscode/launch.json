@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "request": "launch",
+            "name": "Debug Mocha Test",
+            "type": "node",
+            "request": "launch",
+            // Notice, we bypass the launcher and start the test runner directly
+            "program": "${workspaceRoot}/node/node_modules/mocha/bin/_mocha",
+            "stopOnEntry": false,
+            // run the tests in the test folder
+            "args": [
+                "${workspaceRoot}/node/build/**/*.unit.js"
+            ],
+            "cwd": "${workspaceRoot}/node/",
+            "runtimeExecutable": null,
+            "env": {}
+        },
+        {
+         "name": "Attach",
+         "type": "node",
+         "request": "attach",
+         "port": 5858,
+         "sourceMaps": true,
+         "outDir": null,
+         "localRoot": "${workspaceRoot}/node/",
+         "remoteRoot": null
+      }
+    ]
+}
