@@ -1,6 +1,7 @@
 {
   "name": "garagepi",
   "dependencies": {
+    "firebase": "registry:npm/firebase#3.0.5+20160723033700",
     "lodash": "registry:npm/lodash#4.0.0+20160416211519",
     "sinon": "registry:npm/sinon#1.16.0+20160427193336"
   },
@@ -10,6 +11,7 @@
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "mocha": "registry:dt/mocha#2.2.5+20160317120654",
+    "nconf": "registry:dt/nconf#0.0.0+20160724073144",
     "node": "registry:dt/node#6.0.0+20160523035754",
     "serve-static": "registry:dt/serve-static#0.0.0+20160501131543",
     "when": "registry:dt/when#2.4.0+20160317120654"
