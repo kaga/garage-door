@@ -5,6 +5,8 @@ import { OutputGpioController, DoorController } from './gpio/RaspberryPiRelay';
 import { GarageController } from './gpio/garageController';
 import { log } from './gpio/log';
 
+import { readConfiguration, FirebaseBridge } from './firebaseBridge';
+
 var sendevent = require('sendevent');
 
 var app = express();
@@ -25,6 +27,12 @@ var garageController = new GarageController(doorController, lightController, (st
 	log("doorSwitch watch updated: " + state);
 	fireGarageEvents();
 });
+
+const firebaseConfig = readConfiguration();
+let firebaseBridge: FirebaseBridge;
+if (firebaseConfig) {
+	firebaseBridge = new FirebaseBridge(garageController, firebaseConfig);
+}
 
 app.get('/v2/garage/state', (request, response) => {
 	log('/v2/garage/state');
@@ -53,6 +61,7 @@ setInterval(fireGarageEvents, 5000);
 
 app.listen(process.env.PORT || 3000, function () {
 	log("Service Running");
+	log("Firebase bridge: " + (firebaseBridge ? "On" : "Off"));
 });
 
 function fireGarageEvents() {

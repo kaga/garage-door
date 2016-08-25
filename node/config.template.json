@@ -1,0 +1,10 @@
+{
+    "garage": {
+        "firebase": {
+            "authDomain": "appname.firebaseapp.com",
+            "databaseURL": "https://appname.firebaseio.com",
+            "storageBucket": "appname.appspot.com",
+            "serviceAccount": "json file from google console"
+        }
+    }
+}

@@ -16,7 +16,10 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
+    "firebase": "^3.3.0",
     "lodash": "^4.13.1",
+    "moment": "^2.14.1",
+    "nconf": "^0.8.4",
     "onoff": "^1.1.0",
     "sendevent": "^1.0.4",
     "when": "^3.7.7"
