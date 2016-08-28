@@ -37,11 +37,11 @@ export class FirebaseBridge {
     }
 
     onDoorStateUpdated = (value) => {
-        const body = value.val();
-        const state = body.state;
+        const body: DoorStateEvent = value.val();        
         console.log("onDoorStateUpdated" + JSON.stringify(body, null, 4));
 
-        if (this.isStateFromDevice(state) && this.isFreshEvent(state)) {
+        if (this.isStateFromDevice(body) && this.isFreshEvent(body)) {
+            const state = body.state;
             const doorState = doorStateFromString(state);
             switch (doorState) {
                 case DoorState.Open:
