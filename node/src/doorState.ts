@@ -18,7 +18,7 @@ const doorStateMap = {
 }
 
 export function doorStateFromString(state: String): DoorState {
-    const lowerCaseState = state.toLowerCase();
+    const lowerCaseState = _.isString(state) ? state.toLowerCase() : '';
     return _.has(doorStateMap, lowerCaseState) ? doorStateMap[lowerCaseState] : DoorState.Unknown;
 }
 
@@ -27,5 +27,5 @@ export function doorStateFromGarageState(state: GarageState): DoorState {
 }
 
 export function stringifyDoorState(state: DoorState) {
-    return _.findKey(doorStateMap, state.toString());
+    return _.findKey(doorStateMap, _.partial(_.isEqual, state));
 }

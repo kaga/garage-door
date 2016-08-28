@@ -31,4 +31,8 @@ describe('DoorState enum', function() {
         assert.equal(stringifyDoorState(DoorState.Close), 'close');
         assert.equal(stringifyDoorState(DoorState.Closing), 'closing');
     });
+
+    it('isEqual', function() {
+        assert.equal(doorStateFromGarageState(<GarageState>{ isDoorOpen: true }), doorStateFromString('open'));
+    });
 });

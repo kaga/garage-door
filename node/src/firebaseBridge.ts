@@ -93,9 +93,11 @@ export class FirebaseBridge {
 
     shouldUpdateFirebaseState(garageState: GarageState, snapshot: firebase.database.DataSnapshot): boolean {
         const body = snapshot.val();
-        const state = (body.state || '');
+        const state = body.state;
         const firebaseDoorState = doorStateFromString(state);
-        const localDoorState = doorStateFromGarageState(garageState);
-        return (firebaseDoorState !== localDoorState)
+        const localDoorState = doorStateFromGarageState(garageState);          
+        console.log('local state: ' + stringifyDoorState(localDoorState));
+        console.log('firebase state: ' + stringifyDoorState(firebaseDoorState));      
+        return (firebaseDoorState !== localDoorState);
     }
 }

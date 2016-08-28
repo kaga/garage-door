@@ -32,6 +32,7 @@ const firebaseConfig = readConfiguration();
 let firebaseBridge: FirebaseBridge;
 if (firebaseConfig) {
 	firebaseBridge = new FirebaseBridge(garageController, firebaseConfig);
+	firebaseBridge.synchronizeSevice();
 }
 
 app.get('/v2/garage/state', (request, response) => {

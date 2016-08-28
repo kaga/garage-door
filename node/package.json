@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "typings install && tsc",
     "start": "node build/index.js",
-    "test": "tsc && mocha build/**/*.unit.js",
+    "test": "npm run build && ./node_modules/mocha/bin/_mocha $(find ./build -name '*.unit.js')",    
     "build": "tsc",
     "build-production": "npm run clean && tsc && npm run copy-html-app",
     "clean": "rm -rf build/",
