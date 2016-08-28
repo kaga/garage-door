@@ -1,8 +1,11 @@
 import * as firebase from 'firebase';
 import * as nconf from 'nconf';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+import * as when from 'when';
 
-import { GarageController } from './gpio/garageController';
+import { GarageController, GarageState } from './gpio/garageController';
+import { DoorState, doorStateFromGarageState, doorStateFromString, stringifyDoorState } from './doorState';
 
 export function readConfiguration() {
     nconf.file({
@@ -14,13 +17,15 @@ export function readConfiguration() {
     return firebaseConfig;
 }
 
-interface DoorState {
+interface DoorStateEvent {
     timestamp: string;
     state: string;
+    source?: string;
 }
 
 export class FirebaseBridge {
     garage: GarageController;
+    private doorStateRef: firebase.database.Reference;
 
     constructor(garageController: GarageController, firebaseConfig: Object) {
         this.garage = garageController;
@@ -28,6 +33,7 @@ export class FirebaseBridge {
         firebase.initializeApp(firebaseConfig);
         const ref = firebase.database().ref('door-state');
         ref.on('value', this.onDoorStateUpdated);
+        this.doorStateRef = ref;
     }
 
     onDoorStateUpdated = (value) => {
@@ -35,25 +41,61 @@ export class FirebaseBridge {
         const state = body.state;
         console.log("onDoorStateUpdated" + JSON.stringify(body, null, 4));
 
-        if (this.isFreshEvent(state)) {
-            switch (state) {
-                case "Open":
+        if (this.isStateFromDevice(state) && this.isFreshEvent(state)) {
+            const doorState = doorStateFromString(state);
+            switch (doorState) {
+                case DoorState.Open:
                     console.log("should open garage");
                     this.garage.openGarageDoor();
                     break;
-                case "Close":
+                case DoorState.Close:
                     console.log("should close garage");
                     this.garage.closeGarageDoor();
                     break;
             }
-        } else {
-            console.error('door state is too old, not responsing');
         }
     }
 
-    isFreshEvent(doorState: DoorState): boolean {
+    isFreshEvent(doorState: DoorStateEvent): boolean {
         const timestampIsoString = doorState.timestamp;
+        if (_.isString(timestampIsoString) == false) {
+            return false;
+        }
+
         const timestamp = moment(timestampIsoString);
         return (moment().diff(timestamp, 'seconds') <= 60);
+    }
+
+    isStateFromDevice(doorState: DoorStateEvent): boolean {
+        return _.isString(doorState.source);
+    }
+
+    setNeedSynchronize() {
+        const currentState = this.garage.getGarageState();
+
+        this.doorStateRef.once('value').then((snapshot) => {
+            return this.shouldUpdateFirebaseState(currentState, snapshot);
+        })
+            .then((shouldUpdate) => {
+                if (shouldUpdate) {
+                    this.synchronizeSevice();
+                }
+            });
+    }  
+
+    synchronizeSevice() {
+        const currentState = this.garage.getGarageState();
+        this.doorStateRef.set({
+            timestamp: new Date().toISOString(),
+            state: stringifyDoorState(doorStateFromGarageState(currentState))
+        });
+    }
+
+    shouldUpdateFirebaseState(garageState: GarageState, snapshot: firebase.database.DataSnapshot): boolean {
+        const body = snapshot.val();
+        const state = (body.state || '');
+        const firebaseDoorState = doorStateFromString(state);
+        const localDoorState = doorStateFromGarageState(garageState);
+        return (firebaseDoorState !== localDoorState)
     }
 }

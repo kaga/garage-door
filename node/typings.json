@@ -2,13 +2,13 @@
   "name": "garagepi",
   "dependencies": {
     "firebase": "registry:npm/firebase#3.0.5+20160723033700",
-    "lodash": "registry:npm/lodash#4.0.0+20160416211519",
     "sinon": "registry:npm/sinon#1.16.0+20160427193336"
   },
   "globalDependencies": {
     "chai": "registry:dt/chai#3.4.0+20160317120654",
     "express": "registry:dt/express#4.0.0+20160317120654",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "lodash": "registry:dt/lodash#4.14.0+20160817155621",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "mocha": "registry:dt/mocha#2.2.5+20160317120654",
     "nconf": "registry:dt/nconf#0.0.0+20160724073144",
