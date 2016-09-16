@@ -1,22 +1,30 @@
-var bleno = require('bleno');
+const bleno = require('bleno');
+const nconf = require('nconf');
 
-var uuid = '841400cb-1a95-4e34-bfbf-282c7b1efc99';
-var major = 1; // 0x0000 - 0xffff
-var minor = 0; // 0x0000 - 0xffff
-var measuredPower = -59; // -128 - 127
+nconf.env().argv();
+nconf.file({
+  file: 'config.json'
+});
 
-bleno.on('stateChange', function(state) {
+const uuid = nconf.get('iBeaconUuid');
+const major = nconf.get('major');
+const minor = nconf.get('minor');
+const measuredPower = nconf.get('measuredPower'); // -128 - 127
+
+nconf.required(['iBeaconUuid', 'major', 'minor', 'measuredPower']);
+
+bleno.on('stateChange', function (state) {
   console.log('on -> stateChange: ' + state);
 
   if (state === 'poweredOn') {
-    bleno.startAdvertisingIBeacon(uuid, major, minor);
+    bleno.startAdvertisingIBeacon(uuid, major, minor, measuredPower);
   }
 });
 
-bleno.on('advertisingStart', function() {
+bleno.on('advertisingStart', function () {
   console.log('on -> advertisingStart');
 });
 
-bleno.on('advertisingStop', function() {
+bleno.on('advertisingStop', function () {
   console.log('on -> advertisingStop');
 });
