@@ -13,6 +13,10 @@ I made the service avaiable on start up using systemctl, may be not ideal for re
 	> systemctl start garagerestapi 
 (you will need sudo for those)
 
+## Setup doorswitch as a pull up input
+docker run --rm --cap-add SYS_RAWIO --device /dev/mem hypriot/rpi-gpio -g mode 21 up
+docker run --rm --cap-add SYS_RAWIO --device /dev/mem hypriot/rpi-gpio readall
+
 ###Interface
 
 ####GET /v2/garage/state
